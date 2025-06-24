@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {Loader} from "./Index.js";
 
 function Protected({
     children,
@@ -13,14 +14,14 @@ function Protected({
     useEffect(() => {
         setLoader(true);
         if (authentication && authStatus !== authentication) {
-            navigate('/login');
+            console.log("Protected route, redirecting to login");
         } else if(!authentication && authStatus !== authentication){
             // navigate('/');
         }
         setLoader(false);
     }, [authentication, authStatus, navigate]);
 
-    return loader ? <h1>Loading...</h1> : <>{children}</>;
+    return loader ? <Loader /> : <>{children}</>;
 }
 
 export default Protected;

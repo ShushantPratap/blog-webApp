@@ -1,4 +1,6 @@
-import Header from './Header/Header';
+import Header from './Header/Header'
+import Logo from './Logo';
+import Loader from './Loader';
 import Footer from './Footer/Footer';
 import Container from './container/Container';
 import LogoutBtn from './Header/LogoutBtn';
@@ -21,6 +23,8 @@ import Settings from './Settings';
 
 export {
     Header,
+    Logo,
+    Loader,
     Footer,
     Container,
     LogoutBtn,

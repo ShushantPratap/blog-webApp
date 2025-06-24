@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import authService from './appwrite/authentication';
 import { login, logout } from './store/authSlice';
-import { Header, Footer } from './components/Index';
+import { Header, Footer, Loader } from './components/Index';
 import { Outlet } from 'react-router-dom';
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
     </main>
     {authStatus && <Footer />}
     </>
-  ) : <h1>Loading...</h1>;
+  ) : <Loader />;
 
 }
 

@@ -25,14 +25,6 @@ function Home() {
     }
   }, []);
 
-  if (!authStatus) {
-    return (
-      <Container>
-          <h1>Login to read posts</h1>
-          <Link to="/login">Login to your account</Link>
-        </Container>
-    );
-  }
   if(posts.length === 0){
     return (
       <Container>

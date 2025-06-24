@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { login } from '../store/authSlice';
-import { Button, Input, Message } from './Index';
+import { Button, Input, Logo, Message } from './Index';
 import authService from '../appwrite/authentication';
 import userService from "../appwrite/userConfig";
 
@@ -16,23 +16,22 @@ function Signup(){
     const [errorMsg, setErrorMsg] = useState(null);
 
 
-    const create = async (data) =>{
-        console.log("create submit clicked :- ", data)
+    const create = async (data) => {
         try {
             const user = await userService.getUser(data.userId);
             const allUsers = await userService.getAllUsers();
             const email = allUsers.documents.filter(user => user.email === data.email);
-            if(email.length > 0){
+            if(email.length > 0) {
                 setErrorMsg(null);
                 setErrorMsg("This email is already exists.");
                 return;
             }
-            if(user){
+            if(user) {
                 setErrorMsg(null);
                 setErrorMsg("This username isn't available. Please try another.");
                 return;
             }
-            else{
+            else {
                 const userData = await authService.createAccount(data);
                 if (userData) {
                     const file = await authService.setProfileImage(data.userId, data.profileImage[0]);
@@ -66,9 +65,7 @@ function Signup(){
 
     return (
         <div className="form signup">
-            <div className="logo">
-                <h1>LOGO</h1>
-            </div>
+            <Logo />
             <div className='title'>
                 <span>Create your account</span>
             </div>

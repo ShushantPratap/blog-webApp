@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import userService from "../appwrite/userConfig"
 import appwriteService from "../appwrite/config";
-import { Container,ProfileImage ,PostCard, Button } from "./Index";
+import { Container, ProfileImage, PostCard, Button, Loader } from "./Index";
 import { useSelector, useDispatch } from "react-redux";
 import { cacheStoreUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -94,7 +94,7 @@ function ProfileDetails({userId}){
                 ))}
             </div>
         </Container>
-    ) : <h1>Loading...</h1>;
+    ) : <Loader />;
 
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
-import { Container, LogoutBtn, Button } from '../Index';
+import { NavLink } from 'react-router-dom';
+import { Container, LogoutBtn, Button, Logo } from '../Index';
 import './Header.css';
 
 function Header() {
@@ -16,19 +16,9 @@ function Header() {
             active: true
         },
         {
-            name: 'Login',
-            slug: '/login',
-            active: !authStatus
-        },
-        {
-            name: 'Signup',
-            slug: '/signup',
-            active: !authStatus
-        },
-        {
             name: 'All Posts',
             slug: '/all-posts',
-            active: authStatus
+            active: true
         },
         {
             name: 'Add Post',
@@ -37,8 +27,18 @@ function Header() {
         },
         {
             name: 'Profile',
-            slug: `/profile/${userData?.$id}`,
-            active: authStatus
+            slug: `/profile/${userData ? userData.$id : 'login'}`,
+            active: true
+        },
+        {
+            name: 'Login',
+            slug: '/login',
+            active: !authStatus
+        },
+        {
+            name: 'Signup',
+            slug: '/signup',
+            active: !authStatus
         }
     ];
     React.useEffect(() => {
@@ -57,11 +57,7 @@ function Header() {
         <header>
             <Container>
                 <nav>
-                    <div className='logo'>
-                        <Link to='/'>
-                            <h1>Logo</h1>
-                        </Link>
-                    </div>
+                   <Logo />
                     <Button
                         className='open-menuBtn'
                         onClick={() => ref.current.classList.toggle("open-menu")}

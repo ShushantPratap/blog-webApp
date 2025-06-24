@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { Container, PostForm } from "../components/Index";
+import { Container, Loader, PostForm } from "../components/Index";
 import appwriteService from "../appwrite/config";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -30,7 +30,7 @@ function EditPost() {
                 <PostForm post={post} />
             </Container>
         </div>
-    ) : <h1>Loading...</h1>;
+    ) : <Loader />;
 };
 
 export default EditPost;
