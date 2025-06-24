@@ -1,0 +1,94 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
+import { Container, LogoutBtn, Button } from '../Index';
+import './Header.css';
+
+function Header() {
+    const ref = React.useRef();
+    const authStatus = useSelector((state) => state.auth.status);
+    const userData = useSelector((state) => state.auth.userData);
+
+    const navItems = [
+        {
+            name: 'Home',
+            slug: '/',
+            active: true
+        },
+        {
+            name: 'Login',
+            slug: '/login',
+            active: !authStatus
+        },
+        {
+            name: 'Signup',
+            slug: '/signup',
+            active: !authStatus
+        },
+        {
+            name: 'All Posts',
+            slug: '/all-posts',
+            active: authStatus
+        },
+        {
+            name: 'Add Post',
+            slug: '/add-post',
+            active: authStatus
+        },
+        {
+            name: 'Profile',
+            slug: `/profile/${userData?.$id}`,
+            active: authStatus
+        }
+    ];
+    React.useEffect(() => {
+        const mainEle = document.querySelector("main");
+        function closeMenu(){
+            ref.current.classList.remove("open-menu")
+        }
+        mainEle.addEventListener("click", closeMenu);
+        return () => {
+            mainEle.removeEventListener("click", closeMenu);
+        }
+        
+    }, [])
+
+    return (
+        <header>
+            <Container>
+                <nav>
+                    <div className='logo'>
+                        <Link to='/'>
+                            <h1>Logo</h1>
+                        </Link>
+                    </div>
+                    <Button
+                        className='open-menuBtn'
+                        onClick={() => ref.current.classList.toggle("open-menu")}
+                    ><i className="fa fa-bars"></i>
+                    </Button>
+                    <ul className='navLinks' ref={ref}>
+                        {navItems.map((item) =>
+                            item.active ? (
+                                <li key={item.name}>
+                                    <NavLink 
+                                        to={item.slug} 
+                                        className={({isActive}) => `${isActive ? 'active-link': ''}`}
+                                    >{item.name}
+                                    </NavLink>
+                                </li>
+                            ) : null
+                        )}
+                        {authStatus && (
+                            <li className='logout-btn'>
+                                <LogoutBtn />
+                            </li>
+                        )}
+                    </ul>
+                </nav>
+            </Container>
+        </header>
+    );
+}
+
+export default Header;

@@ -1,0 +1,114 @@
+header{
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    box-shadow: 0 1px 1px #ccc;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+}
+nav{
+    width: auto;
+}
+nav a{
+    text-decoration: none;
+    color: #000;
+}
+nav .logo{
+    display: flex;
+    align-items: center;
+}
+nav .logo h1{
+    font-size: 25px;
+}
+nav .open-menuBtn:hover{
+    background: transparent;
+}
+nav .open-menuBtn{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: transparent;
+    color: #000;
+    font-size: 20px;
+}
+nav .navLinks{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    transition: ease-in-out .2s;
+}
+.navLinks a{
+    color: #000;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 50px;
+    transition: all ease-in-out .2s;
+}
+.active-link{
+    color: #fff !important;
+    background-color: #CF3545 !important;
+}
+
+@media screen and (max-width: 480px) {
+    header{
+        padding-right: 0;
+    }
+    nav .open-menuBtn{
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: transparent;
+        color: #000;
+        font-size: 20px;
+    }
+    nav .navLinks.open-menu{
+        right: 0;
+    }
+    nav .navLinks{
+        width: 60%;
+        min-height: 100vh;
+        flex-direction: column;
+        align-items: start;
+        top: 50px;
+        right: -65%;
+        padding: 0;
+        box-shadow: -1px 0 1px #ccc;
+        background-color: #fff;
+    }
+    nav .navLinks li{
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+    }
+    nav li.logout-btn{
+        border: none;
+        margin: 20px 10px;
+    }
+    .navLinks a{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-weight: 400;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+    }
+    .active-link{
+        color: #fff !important;
+        background-color: #CF3545 !important;
+    }
+    
+}

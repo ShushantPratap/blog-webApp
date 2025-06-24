@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .image-details{
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+        img{
+            flex-grow: 1;
+            width: 620px;
+        }
+        table{
+            flex-grow: 1;
+            height: 100px;
+            max-height: 150px;
+        }
+        table th,
+        table td{
+            text-align: left;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-details">
+        <img src='img.jpg'>
+        <table border="1" cellspacing="0">
+            <tr>
+                <th>Created At</th>
+                <td>Thursday | 29/05/25, 08:30</td>
+            </tr>
+            <tr>
+                <th>Last Update</th>
+                <td>Thursday | 29/05/25, 08:30</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
