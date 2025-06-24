@@ -9,12 +9,12 @@ Currently, two official plugins are available:
 
 # Modules
 
-1 - @reduxjs/toolkit (^2.8.2)
-2 - @tinymce/tinymce-react (^6.1.0)
-3 - appwrite (^17.0.2)
-4 - html-react-parser (^5.2.5)
-5 - react (^19.1.0)
-6 - react-dom (^19.1.0)
-7 - react-hook-form (^7.56.3)
-8 - react-redux (^9.2.0)
-9 - react-router-dom (^7.6.0)
+- @reduxjs/toolkit (^2.8.2)
+- appwrite (^17.0.2)
+- @tinymce/tinymce-react (^6.1.0)
+- html-react-parser (^5.2.5)
+- react (^19.1.0)
+- react-dom (^19.1.0)
+- react-hook-form (^7.56.3)
+- react-redux (^9.2.0)
+- react-router-dom (^7.6.0)
