@@ -5,7 +5,6 @@ import { Container,ProfileImage ,PostCard, Button } from "./Index";
 import { useSelector, useDispatch } from "react-redux";
 import { cacheStoreUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 function ProfileDetails({userId}){
     const [userData, setUserData] = React.useState(null);
