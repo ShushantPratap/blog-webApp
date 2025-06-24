@@ -16,7 +16,7 @@ function Protected({
         if (authentication && authStatus !== authentication) {
             console.log("Protected route, redirecting to login");
         } else if(!authentication && authStatus !== authentication){
-            // navigate('/');
+            navigate('/');
         }
         setLoader(false);
     }, [authentication, authStatus, navigate]);
