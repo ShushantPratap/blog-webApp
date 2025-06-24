@@ -1,4 +1,4 @@
-import Header from './header/Header';
+import Header from './header/Header.jsx';
 import Footer from './Footer/Footer';
 import Container from './container/Container';
 import LogoutBtn from './Header/LogoutBtn';
