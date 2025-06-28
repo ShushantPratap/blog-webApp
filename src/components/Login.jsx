@@ -9,20 +9,25 @@ import {useForm} from "react-hook-form";
 function Login(){
     const dispatch = useDispatch();
     const {register, handleSubmit} = useForm();
-    const [error, setError] = useState(true);
+    const [successMsg, setSuccessMsg] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
     
     const login = async (data) => {
-        setError("");
+        setErrorMsg(null);
+        setSuccessMsg(null);
         try {
             const session = await authService.login(data);
             if (session) {
+                setSuccessMsg("Login successful.");
                 const userData = await authService.getCurrentUser();
                 if (userData) {
                     dispatch(authLogin(userData));
                 }
+            }else {
+                setErrorMsg("Login failed. Please check your credentials.");
             }
         } catch (error) {
-            setError(error.message);
+            setErrorMsg(error.message);
         }
     }
 
@@ -32,7 +37,7 @@ function Login(){
             <div className='title'>
                 <span>Login to your account</span>
             </div>
-            {error && <p className="error">{error}</p>}
+            <Message success={successMsg} error={errorMsg} />
             <form onSubmit={handleSubmit(login)}>
                 <Input
                     label="Email"

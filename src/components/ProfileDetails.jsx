@@ -7,21 +7,23 @@ import { cacheStoreUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 
 function ProfileDetails({userId}){
-    const [userData, setUserData] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
-    const [posts, setPosts] = React.useState([]);
+    const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState(null);
+    const [posts, setPosts] = useState([]);
+    const [btnAction, setBtnAction] = useState("posts");
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const loginUser = useSelector(state => state.auth.userData);
     const userPosts = useSelector(state => state.post.posts);
     const storeUsers = useSelector(state => state.user.users);
-
+    const savedPostsId = useSelector(state => state.savePosts.savePosts);
+    
     const imageSrc = appwriteService.getFileView(`profile-image-${userId}`);
     const dateOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
     const createdTime = new Date(userData?.$createdAt).toLocaleDateString("en-GB", dateOptions);
  
-    React.useEffect(() => {
+    useEffect(() => {
         setLoading(true);
         const user = storeUsers?.filter(user => user.$id === userId);
         if(user.length > 0){
@@ -36,26 +38,39 @@ function ProfileDetails({userId}){
             })
             .finally(() => setLoading(false));
         }
-        
+
         setLoading(true);
         if(userId){
             if(userPosts.length > 0){
-                const allPosts = userPosts.filter(post => post.userId === userId);
-                setPosts(allPosts);
+                setPosts(userPosts);
                 setLoading(false);
             }
             else{
                 appwriteService.getPosts([])
                 .then(posts => {
                     if(posts){
-                        const allPosts = posts.documents.filter(post => post.userId === userId);
-                        setPosts(allPosts);
+                        setPosts(posts.documents);
                     }
                 })
                 .finally(() => setLoading(false));
             }
         }
     }, [userId]);
+
+    const activePostBtn = (e) => {
+        const btn = e.target;
+        const i = Array.from(document.querySelectorAll("i"));
+        if(i.includes(btn)){
+            profilePosts(btn.parentElement);
+        }else{
+            profilePosts(btn);
+        }
+    }
+    function profilePosts(El){
+        document.querySelector(".profile-active").classList.remove("profile-active");
+        El.classList.add("profile-active");
+        setBtnAction(El.value)
+    }
 
     return !loading ? (
         <Container className="profile">
@@ -66,7 +81,7 @@ function ProfileDetails({userId}){
                     <p className="profile-d">
                         <span>Posts</span>
                         <br />
-                        {posts.length}
+                        {(posts.filter(post => post.userId === userId)).length}
                     </p>
                     <p className="profile-d">
                         <span>Date Joined</span>
@@ -79,19 +94,52 @@ function ProfileDetails({userId}){
                         <Button onClick={() => navigate("/settings")}>Settings</Button>
                     </div>}
                 </div>
-                <Container className="name container-fluid">
-                    <h3>Name: {userData?.name}</h3>
+                <Container className="container-fluid">
+                    <h3 className="m-3 ml-0">Name: {userData?.name}</h3>
                 </Container>
             </div>
+            <Container className="container-fluid profilePostBtn row">
+                <Button className="profile-active" onClick={activePostBtn} value="posts">
+                    <i className="bx bx-grid mr-1" />
+                    Posts
+                </Button>
+                {loginUser?.$id === userId && 
+                <>
+                <Button onClick={activePostBtn} value="inactive">
+                    <i className='bx bx-minus-square mr-1' /> 
+                    Inactive Posts
+                </Button>
+                <Button className="mr-0" onClick={activePostBtn} value="saved">
+                    <i className='bx  bx-bookmark mr-1' /> 
+                    Saved
+                </Button>
+                </>}
+            </Container>
             <div className="posts row">
-                {posts?.map((post) => (
-                    <div key={post.$id} className="col-4">
-                        <PostCard 
-                            {...post}
-                            userId={false}
-                        />
-                    </div>
-                ))}
+                {posts?.map((post) => {
+                    if(post.userId === userId && btnAction === "posts"){
+                        return <div key={post.$id} className="col-4">
+                            <PostCard 
+                                {...post}
+                                userId={false}
+                            />
+                        </div>
+                    }if(post.status === "inactive" && btnAction === "inactive"){
+                        return <div key={post.$id} className="col-4">
+                            <PostCard 
+                                {...post}
+                                userId={false}
+                            />
+                        </div>
+                    }if(savedPostsId?.includes(post.$id) && btnAction === "saved"){
+                        return <div key={post.$id} className="col-4">
+                            <PostCard 
+                                {...post}
+                                userId={false}
+                            />
+                        </div>
+                    }
+                })}
             </div>
         </Container>
     ) : <Loader />;

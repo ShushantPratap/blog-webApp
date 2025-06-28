@@ -20,6 +20,8 @@ import Avatar from './Avatar';
 import EditProfile from './EditProfile';
 import Message from './Message';
 import Settings from './Settings';
+import SaveBtn from './SaveBtn';
+import ShareBtn from './ShareBtn';
 
 export {
     Header,
@@ -43,5 +45,7 @@ export {
     EditProfile,
     ProfileImage,
     Message,
-    Settings
+    Settings,
+    SaveBtn,
+    ShareBtn
 }

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import {UserId} from "./Index";
+import {SaveBtn, ShareBtn, UserId} from "./Index";
 
 function PostCard({
     $id,
@@ -22,9 +22,18 @@ function PostCard({
                 </div>
                 <div className="postCard-title">
                     <h2>{title}</h2>
-                    <p>{createdTime}</p>
                 </div>
             </Link>
+            <div className="row">
+                <div className="postCard-date">
+                    <i className="bx bx-calendar-alt"></i>
+                    {createdTime}
+                </div>
+                <div className="row">
+                    <ShareBtn url={`justblog.vercel.app/all-posts/${$id}`} title={title} />
+                    <SaveBtn postId={$id} />
+                </div>
+            </div>
         </div>
     );
 }
