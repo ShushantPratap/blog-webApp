@@ -80,10 +80,10 @@ nav .navLinks{
         min-height: 100vh;
         flex-direction: column;
         align-items: start;
-        top: 50px;
+        top: 48px;
         right: -65%;
         padding: 0;
-        box-shadow: -1px 0 1px #ccc;
+        box-shadow: -1px 1px 1px #ccc;
         background-color: #fff;
     }
     nav .navLinks li{

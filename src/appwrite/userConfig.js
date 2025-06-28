@@ -72,6 +72,27 @@ export class Service{
             return false;
         }
     }
+    
+    async savePost(slug, email, userData, postId){
+        try {
+            const userInfo = JSON.stringify(userData);
+            return await this.databases.updateDocument(
+                Configure.appwriteDatabaseId,
+                Configure.appwriteAccountsCollectionId,
+                slug,
+                {
+                    email,
+                    userData: userInfo,
+                    savePost: postId
+                }
+            );
+        } catch (error) {
+            console.error("Appwrite serive :: updateUserData :: error ", error);
+            return false;          
+        }
+    }
+
+    
 }
 
 const service = new Service();
