@@ -7,7 +7,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { AuthLayout } from './components/Index.js'
 
 import { Home, Signup, Login, AddPhoto, AllPosts,AddPost, EditPost,
-  Post, Profile, EditProfilePage, Settings } 
+  Post, Profile, EditProfilePage, Settings, Logs } 
 from './pages/Index.js';
 
 const router = createBrowserRouter([
@@ -101,6 +101,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication>
             <Settings />
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/logs',
+        element: (
+          <AuthLayout authentication>
+            <Logs />
           </AuthLayout>
         )
       }

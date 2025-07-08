@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function EditPost() {
+    const tabTitle = document.querySelector("title");
+    tabTitle.innerText = "Edit Post";
+    
     const userData = useSelector(state => state.auth.userData);
     const [post, setPost] = useState(null);
     const {slug} = useParams();

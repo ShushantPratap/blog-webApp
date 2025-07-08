@@ -134,6 +134,9 @@ a:hover {
 .w-100{
   width: 100% !important;
 }
+.h-100{
+  max-height: 100% !important;
+}
 
 .container {
   width: 90%;
@@ -182,9 +185,22 @@ a:hover {
   width: 100%;
   font-weight: 500;
   font-size: 17px;
+  padding: 5px 0;
+  display: flex;
+}
+.col-heading a{
+  font-size: 20px;
+  color: #000;
+  margin: 0 10px;
+  margin-left: auto;
+  transition: .2s;
+}
+.col-heading a:hover{
+  color: #CF3545;
 }
 .table-wrapper{
   width: 100%;
+  max-height: 420px;
   overflow: auto;
 }
 .table-wrapper table{
@@ -237,7 +253,7 @@ a:hover {
   height: fit-content;
   padding: 1px;
   position: fixed;
-  top: 70px;
+  top: 40px;
   left: 0;
   overflow: hidden;
   z-index: 99;
@@ -439,11 +455,13 @@ label{
   transition: ease-in-out .2s;
 }
 .postCard .postCard-title{
+  font-size: 20px;
+  font-weight: 600;
   color: #000;
   padding: 0 10px;
 }
 .postCard .postCard-date{
-  margin: 0 auto 0 7px;
+  margin: 1px auto 0 7px;
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -453,13 +471,18 @@ label{
   font-size: 18px;
   margin: 3px;
 }
-.postCard:hover .postCard-title h2{
+.postCard:hover .postCard-title p{
   color: #CF3545;
 }
 .postCard:hover .postCard-image img{
   scale: 1.055;
 }
-
+.postCard-btn{
+  width: 100%;
+  justify-content: end !important;
+  margin-top: 1px;
+  margin-bottom: 10px;
+}
 .shareBtn:hover, .saveBtn:hover{
   background-color: #ccc;
 }
@@ -467,10 +490,8 @@ label{
   width: fit-content;
   height: fit-content;
   display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 25px;
-  margin: 8px 5px;
+  margin: 0 4px;
   padding: 5px;
   background: transparent;
   color: #000;
@@ -478,6 +499,27 @@ label{
   transition: .3s;
 }
 .bxs-bookmark{
+  color: #CF3545;
+}
+.share-icon{
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 3px;
+}
+.share-icon a i{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: #000;
+  border-radius: 50px;
+  margin: 0 2px;
+  transition: .2s;
+}
+.share-icon a i:hover{
+  background-color: #ccc;
   color: #CF3545;
 }
 
@@ -549,8 +591,10 @@ label{
   width: auto;
   padding: 10px;
 }
-.post hr{
-  margin: 10px 0;
+.post .header{
+  padding: 5px;
+  background-color: #eaeaea;
+  border-radius: 5px;
 }
 .post .col-1{
   display: flex;
@@ -596,9 +640,12 @@ label{
 .post h1.title{
   max-width: 620px;
   margin: 0 auto;
-  margin-bottom: 20px;
   text-align: center;
-  border-bottom: 1px solid;
+}
+.post .paragraph{
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #eaeaea;
 }
 
 /* Profile page */
@@ -626,17 +673,17 @@ label{
   border: 1px solid #cacaca;
   border-radius: 10px;
 }
-.profile .col-4 p.profile-d{
+.profile .col p.profile-d{
   display: inline-block;
   margin-left: 25px;
 }
-.profile .col-4 p.profile-d span{
+.profile .col p.profile-d span{
   font-weight: 700;
 }
-.profile .col-4 .profile-btns{
+.profile .col .profile-btns{
   margin: 0 15px;
 }
-.profile .col-4 .profile-btns button{
+.profile .col .profile-btns button{
   margin: 10px;
 }
 
@@ -721,7 +768,63 @@ label{
   }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 720px) {
+  .container{
+    width: 100%;
+  }
+  .row{
+    justify-content: center;
+  }
+  .col-4{
+    max-width: 300px;
+    margin: 3px;
+  }
+  .postCard{
+    margin: 0;
+  }
+  .table-wrapper table{
+    width: 900px;
+  }
+  .update-profile .row{
+    padding: 10px;
+  }
+  .profile .header{
+    padding: 20px 5px;
+    padding-bottom: 0;
+  }
+}
+@media screen and (max-width: 420px) { 
+  .col-4{
+    max-width: 180px;
+  }
+  /* Post card */
+  .postCard {
+    margin: 0;
+  }
+  .postCard .postCard-image {
+    height: 150px;
+  }
+  .postCard .postCard-title{
+    font-size: 14px;
+    padding: 2px;
+  }
+  .postCard .postCard-date{
+    width: 100px;
+    margin: 0;
+    margin-right: auto;
+    align-items: start;
+  }
+  .postCard .postCard-btn{
+    width: 80px;
+    margin: 0;
+  }
+  .postCard .saveBtn, .postCard .shareBtn{
+    font-size: 22px;
+  }
+  .postCard .share-icon{
+    display: none;
+  }
+
   .table-wrapper table{
     width: 800px;
   }
@@ -732,35 +835,27 @@ label{
     width: 100px;
     height: 100px;
   }
-  .profile .col-4 .userId{
+  .profile .col .userId{
     margin-left: 10px;
   }
-  .profile .col-4 p{
+  .profile .col .date{
+    width: 100%;
+    display: flex;
     margin-left: 10px;
   }
-  .profile .col-4 .profile-btns{
-    margin: 10px 15px;
-  }
-  .profile .col-4 .profile-btns button{
+  .profile .col p.profile-d{
+    width: fit-content;
     margin-left: 10px;
+  }
+  .profile .col .profile-btns{
+    margin: 0 15px;
+  }
+  .profile .col .profile-btns button{
+    margin-left: 0;
   }
   .avatar .profile-image{
     width: 200px;
     height: 200px;
   }
 
-}
-@media screen and (max-width: 720px) {
-  .container{
-    width: 100%;
-  }
-  .row{
-    justify-content: center;
-  }
-  .table-wrapper table{
-    width: 900px;
-  }
-  .update-profile .row{
-    padding: 10px;
-  }
 }

@@ -9,6 +9,7 @@ import Profile from './Profile';
 import EditProfilePage from './EditProfilePage';
 import Settings from './Settings';
 import AddPhoto from './AddPhoto';
+import Logs from './Logs';
 
 export {
     AddPost,
@@ -21,5 +22,6 @@ export {
     Profile,
     EditProfilePage,
     Settings,
-    AddPhoto
+    AddPhoto,
+    Logs
 };

@@ -76,18 +76,20 @@ function ProfileDetails({userId}){
         <Container className="profile">
             <div className="header row align-center">
                 <ProfileImage src={imageSrc} />
-                <div className="col-4">
+                <div className="col">
                     <div className="profile-userId">{userData?.$id}</div>
-                    <p className="profile-d">
-                        <span>Posts</span>
-                        <br />
-                        {(posts.filter(post => post.userId === userId)).length}
-                    </p>
-                    <p className="profile-d">
-                        <span>Date Joined</span>
-                        <br />
-                        {createdTime}
-                    </p>
+                    <div className="date">
+                        <p className="profile-d">
+                            <span>Posts</span>
+                            <br />
+                            {(posts.filter(post => post.userId === userId)).length}
+                        </p>
+                        <p className="profile-d">
+                            <span>Date Joined</span>
+                            <br />
+                            {createdTime}
+                        </p>
+                    </div>
                     {loginUser?.$id === userId &&
                     <div className="profile-btns">
                         <Button onClick={() => navigate("/edit-profile")}>Edit</Button>

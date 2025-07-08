@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import {useEffect, useState} from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Container, Button, UserId } from "../components/Index";
+import { Container, Button, UserId, SaveBtn, ShareBtn } from "../components/Index";
 import parse from "html-react-parser";
 import { useSelector, useDispatch } from "react-redux";
 import {deleteCachePost} from "../store/postSlice";
 
 function Post(){
+    const tabTitle = document.querySelector("title");
     const [post, setPost] = useState(null);
     const { slug } = useParams();
     const navigate = useNavigate();
@@ -14,12 +15,10 @@ function Post(){
 
     const userData = useSelector(state => state.auth.userData);
     const isAuthor = post && userData ? post.userId === userData.$id : false;
-    // const imageUrl = `https://fra.cloud.appwrite.io/v1/storage/buckets/68261c11003326b78423/files/${post?.featuredImage}/view?project=6826166b001919215303&mode=admin`;
-    // const imageSrc = appwriteService.getFilePreview(post?.featuredImage);
     const imageSrc = appwriteService.getFileView(post?.featuredImage);
-    const createdTime = new Date(post?.$createdAt);
-    const updatedTime = new Date(post?.$updatedAt);
-    const Days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+    const createdTime = new Date(post?.$createdAt).toLocaleTimeString("en-GB", dateOptions);
+    const updatedTime = new Date(post?.$updatedAt).toLocaleTimeString("en-GB", dateOptions);
     const storePosts = useSelector(state => state.post.posts);
 
     useEffect(() => {
@@ -27,14 +26,18 @@ function Post(){
             if(storePosts.length > 0){
                 const post = storePosts.filter(post => post.$id === slug);
                 setPost(post[0]);
+                tabTitle.innerText = post[0].title;
             }
             else{
                 appwriteService.getPost(slug).then(post => {
-                    if(post) setPost(post);
-                    else navigate("/");
+                    if(post) {
+                        setPost(post);
+                        tabTitle.innerText = post.title;
+                    } else navigate("/");
                 });
             }
         } else navigate("/");
+    
     }, [slug, navigate]);
 
     const deletePost = () => {
@@ -52,8 +55,13 @@ function Post(){
     return post ? (
         <div className="post">
             <Container>
-                <UserId userId={post.userId} />
-                <hr />
+                <div className="header">
+                    <UserId userId={post.userId} />
+                    <Container className="postCard-btn row">
+                        <ShareBtn url={`https://justblog.vercel.app/all-posts/${post.$id}`} title={post.title} />
+                        <SaveBtn postId={post.$id} />
+                    </Container>
+                </div>
                 <div className="col-1">
                     <div className="image-details row">
                         <img
@@ -64,11 +72,11 @@ function Post(){
                             <tbody>
                                 <tr>
                                     <th>Created At</th>
-                                    <td>{`${Days[createdTime.getDay()-1]} | ${createdTime.toLocaleString()}`}</td>
+                                    <td>{createdTime}</td>
                                 </tr>
                                 <tr>
                                     <th>Last Update</th>
-                                    <td>{`${Days[updatedTime.getDay()-1]} | ${updatedTime.toLocaleString()}`}</td>
+                                    <td>{updatedTime}</td>
                                 </tr>
                             </tbody>
                         </table>

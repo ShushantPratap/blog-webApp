@@ -2,6 +2,9 @@ import { Link, useParams } from "react-router-dom";
 import {Container, ProfileDetails, Button} from "../components/Index";
 
 function Profile(){
+    const tabTitle = document.querySelector("title");
+    tabTitle.innerText = "Prifile";
+    
     const {slug} = useParams();
    
     return (

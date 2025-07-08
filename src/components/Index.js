@@ -22,6 +22,7 @@ import Message from './Message';
 import Settings from './Settings';
 import SaveBtn from './SaveBtn';
 import ShareBtn from './ShareBtn';
+import Table from './Table.jsx';
 
 export {
     Header,
@@ -47,5 +48,6 @@ export {
     Message,
     Settings,
     SaveBtn,
-    ShareBtn
+    ShareBtn,
+    Table
 }

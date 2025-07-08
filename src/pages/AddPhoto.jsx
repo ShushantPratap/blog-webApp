@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Avatar, Container } from "../components/Index";
 
 function AddPhoto(){
+    const tabTitle = document.querySelector("title");
+    tabTitle.innerText = "Add photo";
+    
     const userData = useSelector(state => state.auth.userData);
     const {slug} = useParams();
     const navigate = useNavigate();

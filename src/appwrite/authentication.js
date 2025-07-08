@@ -134,6 +134,16 @@ export class AuthService {
                 return false;
             }
         }
+
+        async getLogs(){
+            try {
+                const result = await this.account.listLogs();
+                return result;
+            }catch (error) {
+                console.log("Appwrite service :: getLogs :: error ", error);
+                return false;   
+            }
+        }
 }
 
 const authService = new AuthService();

@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import {cacheStorePosts} from "../store/postSlice"
 
 function Home() {
+  const tabTitle = document.querySelector("title");
+  tabTitle.innerText = "Home";
+    
   const [posts, setPosts] = useState([]);
   const authStatus = useSelector(state => state.auth.status);
   const storePosts = useSelector(state => state.post.posts);

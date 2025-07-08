@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import authService from './appwrite/authentication';
 import userService from './appwrite/userConfig';
@@ -6,6 +6,8 @@ import { login, logout } from './store/authSlice';
 import { savePost } from './store/postSaveSlice';
 import { Header, Footer, Loader } from './components/Index';
 import { Outlet } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +15,7 @@ function App() {
   const authStatus = useSelector(state => state.auth.status);
   const savePostId = useSelector(state => state.savePosts.savePosts);
 
+  
   useEffect(() => {
     setLoading(true);
     authService.getCurrentUser()
@@ -46,6 +49,9 @@ function App() {
         <Outlet />
     </main>
     {authStatus && <Footer />}
+    {/* vercel analutics or  SpeedInsights*/}
+    <Analytics />
+    <SpeedInsights />
     </>
   ) : <Loader />;
 

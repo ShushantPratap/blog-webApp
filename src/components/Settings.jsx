@@ -2,8 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import appwriteService from "../appwrite/config";
 import authService from "../appwrite/authentication";
 import { logout } from "../store/authSlice";
-import { Button, ProfileImage, Message } from "./Index";
-import { useNavigate } from "react-router-dom";
+import { Button, ProfileImage, Message, Table } from "./Index";
+import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 
 function Settings(){
@@ -15,11 +15,12 @@ function Settings(){
     const [errorMessage, setErrorMessage] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
     const [sessions, setSessions] = useState(null);
+    const [logs, setLogs] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const dateConvert = (date) => {
-        const dateOptions = { weekday: 'short', year: 'numeric', month: 'long', 
+        const dateOptions = { weekday: 'short', year: 'numeric', month: 'short', 
             day: 'numeric', hour: "2-digit", 
             minute: "2-digit", hour12: true };
         const time = new Date(date).toLocaleTimeString("en-GB", dateOptions);
@@ -32,7 +33,6 @@ function Settings(){
         const result = await authService.getSessions();
         if(result) setSessions(result.sessions);
     }
-
     const deleteSession = async (e) => {
         setErrorMessage(null);
         setSuccessMessage(null);
@@ -48,7 +48,6 @@ function Settings(){
             }
         }
     }
-
     const deletAllSessions = () => {
         setErrorMessage(null);
         setSuccessMessage(null);
@@ -67,6 +66,14 @@ function Settings(){
             });
             getSessions();
         }
+    }
+
+    const getLogs = async () =>{
+        setErrorMessage(null);
+        const result = await authService.getLogs();
+        if(result){
+            setLogs(result.logs);
+        }else setErrorMessage("Something went wrong, Please try again.");
     }
 
     const logoutHandler = () => {
@@ -109,42 +116,63 @@ function Settings(){
                     Where You're Logged in
                 </span></Button>}
                 <div className="table-wrapper">
-                    {sessions && <table cellSpacing="0">
-                        <tbody>
-                            <tr>
-                                <th>Browser and device</th>
-                                <th>Type</th>
-                                <th>Location</th>
-                                <th>ip</th>
-                                <th>login at</th>
-                                <th>
-                                    <Button onClick={deletAllSessions}>Logout all</Button>
-                                </th>
-                            </tr>
-                            {sessions?.map(session => (
-                                <tr key={session.$id}>
-                                    <td>
-                                        {session.clientName}
-                                        <br />
-                                        {session.clientVersion}
-                                        <br />
-                                        {session.osName} {session.osVersion}
-                                    </td>
-                                    <td>{session.clientType}</td>
-                                    <td>{session.countryName}</td>
-                                    <td>{session.ip}</td>
-                                    <td>{dateConvert(session.$createdAt)}</td>
-                                    <td>{session.current ?
-                                        <p className="sessionActive">this device</p> :
-                                        <Button
-                                            onClick={deleteSession}
-                                            value={session.$id}
-                                        >Log out</Button>}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>}
+                    {sessions && <Table 
+                        thead={["s.no.", "Browser and device", "Type", "Location", "ip", "login at", <Button onClick={deletAllSessions}>Logout all</Button>]}
+                        trow={sessions?.map((session, i) => (
+                            [<tr key={session.$id}>
+                                <td>{i+1}</td>
+                                <td>{session.clientName}
+                                <br />
+                                {session.clientVersion}
+                                <br />
+                                {session.osName} {session.osVersion}</td>
+                                <td>{session.clientType}</td>
+                                <td>{session.countryName}</td>
+                                <td>{session.ip}</td>
+                                <td>{dateConvert(session.$createdAt)}</td>
+                                <td>{session.current ?
+                                <p className="sessionActive">this device</p> :
+                                <Button
+                                    onClick={deleteSession}
+                                    value={session.$id}
+                                >Log out</Button>}</td>
+                            </tr>]
+                        ))}
+                    />}
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-heading ml-1">
+                    <p>Account activity</p>
+                    <Link to="/logs" title="Logs">
+                        <i className='bx bx-arrow-out-up-right-stroke-square' />
+                    </Link>
+                </div>
+                {!logs && 
+                <Button 
+                className="col-1 m-2"
+                onClick={getLogs}
+                ><span className="m-5">
+                    Click to get Logs
+                </span></Button>}
+                <div className="table-wrapper">
+                    {logs && <Table 
+                        thead={["s.no.", "event", "Browser and device", "Location", "ip", "date"]}
+                        trow={logs.map((log, i) => (
+                            [<tr key={log.time}>
+                                <td>{i+1}</td>
+                                <td>{log.event}</td>
+                                <td>{log.clientName}
+                                <br />
+                                {log.clientVersion}
+                                <br />
+                                {log.osName} {log.osVersion}</td>
+                                <td>{log.countryName}</td>
+                                <td>{log.ip}</td>
+                                <td>{dateConvert(log.time)}</td>
+                            </tr>]
+                        ))}
+                    />}
                 </div>
             </div>
             <div className="row">
