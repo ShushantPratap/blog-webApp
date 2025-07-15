@@ -12,9 +12,11 @@ function AllPosts() {
             <Container>
                 <div className="posts grid">
                     {posts?.map((post) => (
+                        post.status ==="active" ?
                         <div key={post.$id} className="grid-item">
                             <PostCard {...post} />
                         </div>
+                        : null
                     ))}
                 </div>
                 <div className="row justify-center m-3">

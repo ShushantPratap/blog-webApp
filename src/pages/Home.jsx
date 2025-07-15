@@ -25,7 +25,7 @@ function Home() {
       <Container>
         <div className="grid">
           {posts.map((post, index) => (
-            index > 1 ?
+            index > 1 && post.status ==="active" ?
             <div key={post.$id} className="grid-item">
               <PostCard 
                 {...post}
