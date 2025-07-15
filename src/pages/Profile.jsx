@@ -3,7 +3,7 @@ import {Container, ProfileDetails, Button} from "../components/Index";
 
 function Profile(){
     const tabTitle = document.querySelector("title");
-    tabTitle.innerText = "Prifile";
+    tabTitle.innerText = "Profile";
     
     const {slug} = useParams();
    

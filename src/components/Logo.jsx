@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom';
+import logo from "../assets/img/logo.png"
 
 function Logo({link = false}) {
   return (
     <div className='logo'>
         {link ? 
         <Link to="/">
-            <h1>Logo</h1>
+          <img src={logo} alt="logo" />
         </Link>
-        : <h1>Logo</h1>
+        : <img src={logo} alt="logo" />
         }
+        <h1>just blog</h1>
     </div>
   );
 }

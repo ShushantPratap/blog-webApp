@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import userService from "../appwrite/userConfig"
 import appwriteService from "../appwrite/config";
 import { Container, ProfileImage, PostCard, Button, Loader } from "./Index";
 import { useSelector, useDispatch } from "react-redux";
 import { cacheStoreUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
+import { useUserPosts } from "../customeHooks/postGetHook";
 
 function ProfileDetails({userId}){
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
-    const [posts, setPosts] = useState([]);
     const [btnAction, setBtnAction] = useState("posts");
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [posts, setUserId] = useUserPosts();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const loginUser = useSelector(state => state.auth.userData);
-    const userPosts = useSelector(state => state.post.posts);
     const storeUsers = useSelector(state => state.user.users);
     const savedPostsId = useSelector(state => state.savePosts.savePosts);
     
@@ -25,36 +26,20 @@ function ProfileDetails({userId}){
  
     useEffect(() => {
         setLoading(true);
+        setUserId(userId)
         const user = storeUsers?.filter(user => user.$id === userId);
         if(user.length > 0){
             setUserData(user[0]);
-            setLoading(false);
-        }else{
+        }
+        else{
             userService.getUser(userId)
             .then(user => JSON.parse(user.userData))
             .then(user => {
                 setUserData(user);
                 dispatch(cacheStoreUser(user));
             })
-            .finally(() => setLoading(false));
         }
-
-        setLoading(true);
-        if(userId){
-            if(userPosts.length > 0){
-                setPosts(userPosts);
-                setLoading(false);
-            }
-            else{
-                appwriteService.getPosts([])
-                .then(posts => {
-                    if(posts){
-                        setPosts(posts.documents);
-                    }
-                })
-                .finally(() => setLoading(false));
-            }
-        }
+        setLoading(false);
     }, [userId]);
 
     const activePostBtn = (e) => {
@@ -72,8 +57,20 @@ function ProfileDetails({userId}){
         setBtnAction(El.value)
     }
 
-    return !loading ? (
+    const getSavedPosts = async () => {
+        setLoading(true);
+        if(savedPosts.length===0){
+            const result = await appwriteService.getSavedPosts(savedPostsId);
+            if(result){
+                setSavedPosts(result.documents);
+            }
+        }
+        setLoading(false);
+    }
+
+    return (
         <Container className="profile">
+            {loading && <Loader />}
             <div className="header row align-center">
                 <ProfileImage src={imageSrc} />
                 <div className="col">
@@ -111,30 +108,30 @@ function ProfileDetails({userId}){
                     <i className='bx bx-minus-square mr-1' /> 
                     Inactive Posts
                 </Button>
-                <Button className="mr-0" onClick={activePostBtn} value="saved">
+                <Button 
+                    className="mr-0" 
+                    onClick={(e) => {
+                        activePostBtn(e);
+                        getSavedPosts()}
+                    }
+                    value="saved"
+                >
                     <i className='bx  bx-bookmark mr-1' /> 
                     Saved
                 </Button>
                 </>}
             </Container>
-            <div className="posts row">
+            <div className="posts grid">
                 {posts?.map((post) => {
-                    if(post.userId === userId && btnAction === "posts"){
-                        return <div key={post.$id} className="col-4">
+                    if(post.status === "active" && btnAction === "posts"){
+                        return <div key={post.$id} className="grid-item">
                             <PostCard 
                                 {...post}
                                 userId={false}
                             />
                         </div>
                     }if(post.status === "inactive" && btnAction === "inactive"){
-                        return <div key={post.$id} className="col-4">
-                            <PostCard 
-                                {...post}
-                                userId={false}
-                            />
-                        </div>
-                    }if(savedPostsId?.includes(post.$id) && btnAction === "saved"){
-                        return <div key={post.$id} className="col-4">
+                        return <div key={post.$id} className="grid-item">
                             <PostCard 
                                 {...post}
                                 userId={false}
@@ -142,9 +139,21 @@ function ProfileDetails({userId}){
                         </div>
                     }
                 })}
+                {savedPosts.length > 0 &&
+                savedPosts?.map(post => {
+                    if(btnAction === "saved"){
+                        return <div key={post.$id} className="grid-item">
+                        <PostCard
+                            {...post}
+                            userId={false}
+                        />
+                        </div>
+                    }
+                })
+                }
             </div>
         </Container>
-    ) : <Loader />;
+    );
 
 }
 

@@ -79,15 +79,47 @@ export class Service{
         }
     }
 
-    async getPosts(queries = [Query.equal("status", "active")]){
+    async getPosts(lastId){
         try {
+            const query = lastId ? Query.cursorAfter(lastId) : Query.offset(0);
             return await this.databases.listDocuments(
                 Configure.appwriteDatabaseId,
                 Configure.appwriteCollectionId,
-                queries
+                [
+                    Query.limit(8),
+                    query
+                ]
             );
         } catch (error) {
             console.error("Appwrite serive :: getPosts :: error ", error);     
+            return false;
+        }
+    }
+    // Get user posts
+    async getUserPosts(userId){
+         try {
+            if(userId){
+                return await this.databases.listDocuments(
+                    Configure.appwriteDatabaseId,
+                    Configure.appwriteCollectionId,
+                    [Query.equal("userId", [userId])]
+                );
+            }
+        } catch (error) {
+            console.error("Appwrite serive :: getUserPosts :: error ", error);     
+            return false;
+        }
+    }
+    // Get saved posts
+    async getSavedPosts(postId){
+         try {
+            return await this.databases.listDocuments(
+                Configure.appwriteDatabaseId,
+                Configure.appwriteCollectionId,
+                [Query.equal("$id", postId)]
+            );
+        } catch (error) {
+            console.error("Appwrite serive :: getUserPosts :: error ", error);     
             return false;
         }
     }

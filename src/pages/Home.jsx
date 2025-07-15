@@ -1,32 +1,13 @@
-import React, {useEffect, useState} from "react";
-import appwriteService from "../appwrite/config";
+import { useEffect } from "react";
 import { Container, PostCard } from "../components/Index";
-import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {cacheStorePosts} from "../store/postSlice"
+import { useGetPosts } from "../customeHooks/postGetHook";
 
 function Home() {
   const tabTitle = document.querySelector("title");
   tabTitle.innerText = "Home";
-    
-  const [posts, setPosts] = useState([]);
-  const authStatus = useSelector(state => state.auth.status);
-  const storePosts = useSelector(state => state.post.posts);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (storePosts.length > 0) {
-      setPosts(storePosts);
-    }
-    else {
-      appwriteService.getPosts([]).then(posts => {
-        if(posts){
-          setPosts(posts.documents);
-          posts.documents.map(post => dispatch(cacheStorePosts(post)));
-        }
-      });
-    }
-  }, []);
+  const [posts] = useGetPosts();
 
   if(posts.length === 0){
     return (
@@ -42,10 +23,10 @@ function Home() {
   return (
     <div className="home-page">
       <Container>
-        <div className="row">
+        <div className="grid">
           {posts.map((post, index) => (
             index > 1 ?
-            <div key={post.$id} className="col-4">
+            <div key={post.$id} className="grid-item">
               <PostCard 
                 {...post}
               />

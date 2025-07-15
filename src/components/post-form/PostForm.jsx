@@ -4,7 +4,7 @@ import { Button, Input, RTE, SelectOpt } from "../Index";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {cacheStorePosts} from "../../store/postSlice"
+import {cacheStorePosts, deleteCachePost} from "../../store/postSlice"
 
 function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
@@ -36,6 +36,8 @@ function PostForm({ post }) {
                 featuredImage: file ? file.$id : undefined
             });
             if (dbPost) {
+                dispatch(deleteCachePost(post.$id));
+                dispatch(cacheStorePosts(dbPost));
                 navigate(`/all-posts/${dbPost.$id}`);
             }
         } else {

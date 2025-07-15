@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Container, LogoutBtn, Button, Logo } from '../Index';
-import './Header.css';
+import { AlignJustify } from "lucide-react";
 
 function Header() {
     const ref = React.useRef();
@@ -61,7 +61,7 @@ function Header() {
                     <Button
                         className='open-menuBtn'
                         onClick={() => ref.current.classList.toggle("open-menu")}
-                    ><i className="fa fa-bars"></i>
+                    ><AlignJustify strokeWidth={2} />
                     </Button>
                     <ul className='navLinks' ref={ref}>
                         {navItems.map((item) =>

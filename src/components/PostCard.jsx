@@ -10,7 +10,7 @@ function PostCard({
     userId
 }){
     const imageSrc = appwriteService.getFileView(featuredImage);
-    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
     const createdTime = new Date($createdAt).toLocaleDateString("en-GB", dateOptions);
 
     return (

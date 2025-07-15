@@ -100,10 +100,11 @@ export class AuthService {
         }
     }
 
-    async updatePassword(password){
+    async updatePassword(password, oldPassword){
         try {
             const result = await this.account.updatePassword(
-                password // password
+                password, // password
+                oldPassword // old password
             );
             return result;
         } catch (error) {

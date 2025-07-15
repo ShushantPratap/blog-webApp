@@ -9,12 +9,16 @@ import { Outlet } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
+import appwriteService from './appwrite/config';
+import { cacheStorePosts } from './store/postSlice';
+
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const authStatus = useSelector(state => state.auth.status);
   const savePostId = useSelector(state => state.savePosts.savePosts);
-
+  
+  const storePosts = useSelector(state => state.post.posts);
   
   useEffect(() => {
     setLoading(true);

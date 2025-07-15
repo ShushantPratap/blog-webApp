@@ -41,7 +41,6 @@ function SaveBtn({postId}) {
                 dispatch(savePost(postId));
                 const ids = Array.from(savePostId);
                 ids.push(postId);
-                console.log(ids)
                 const save = await userService.savePost(userId, userEmail, userData, ids);
                 if(save){
                     console.log("add");

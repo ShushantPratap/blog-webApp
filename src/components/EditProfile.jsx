@@ -1,34 +1,32 @@
-import React, { useState} from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { Avatar, Button, Container, Input, Message, ProfileImage } from './Index';
 import authService from '../appwrite/authentication';
 import userService from "../appwrite/userConfig";
 import appwriteService from "../appwrite/config";
 import { login } from '../store/authSlice';
+import { Avatar, Button, Container, Input, Loader, Message, ProfileImage } from './Index';
 
 function EditProfile(){
     const [successMsg, setSuccessMsg] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [imgUpdate, setImgUpdate] = useState(false);
-    
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     
     const userData = useSelector(state => state.auth.userData);
-    const {register, handleSubmit} = useForm({
-        defaultValues: {
-            userId: userData.$id,
-            name: userData.name,
-            email: userData.email,
-            password: "********"
-        }
-    });
+    const [name, setName] = useState(userData?.name);
+    const [email, setEmail] = useState(userData?.email);
+    const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+
     const imageSrc = appwriteService.getFileView(`profile-image-${userData?.$id}`);
 
-    const updateName = async (data) => {
+    const updateName = async (e) => {
+        e.preventDefault();
+        setLoading(true);
         setSuccessMsg(null);
         setErrorMsg(null);
-        const user = await authService.updateName(data.name);
+        const user = await authService.updateName(name);
         if(user) {
             const updateUser = await userService.updateUserData(user.$id, user.email, user);
             if (updateUser) setSuccessMsg("Name updated successfully.");
@@ -36,12 +34,15 @@ function EditProfile(){
         }else{
             setErrorMsg("something went wrong, please try again.");
         }
+        setLoading(false);
     }
 
-    const updateEmail = async (data) =>{
+    const updateEmail = async (e) => {
+        e.preventDefault();
+        setLoading(true);
         setSuccessMsg(null);
         setErrorMsg(null);
-        const user = await authService.updateEmail(data.email, data.password);
+        const user = await authService.updateEmail(email, password);
         if(user) {
             const updateUser = await userService.updateUserData(user.$id, user.email, user);
             if (updateUser) setSuccessMsg("Email updated successfully.");
@@ -49,10 +50,28 @@ function EditProfile(){
         }else{
             setErrorMsg("something went wrong check please your password and try again.");
         }
+        setLoading(false);
+    }  
+    
+    const updatePassword = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setSuccessMsg(null);
+        setErrorMsg(null);
+        const user = await authService.updatePassword(newPassword, password);
+        if(user) {
+            const updateUser = await userService.updateUserData(user.$id, user.email, user);
+            if (updateUser) setSuccessMsg("Password updated successfully.");
+            dispatch(login(user));
+        }else{
+            setErrorMsg("something went wrong check please your password and try again.");
+        }
+        setLoading(false);
     }
 
     return (
         <div className="update-profile">
+            {loading && <Loader />}
             <Container className='container-fluid'>
                 <h2>Edit Profile</h2>
             </Container>
@@ -73,42 +92,59 @@ function EditProfile(){
             </div>
             
             <form 
-                onSubmit={handleSubmit(updateName)}
+                onSubmit={updateName}
                 className='row'
             >
                 <Input
                     type="text"
                     placeholder="Enter your name"
-                    {...register("name", {
-                        required: true,
-                    })}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
                 />
                 <Button type='submit'>Update Name</Button>
             </form>
 
             <form 
-                onSubmit={handleSubmit(updateEmail)}
+                onSubmit={updateEmail}
                 className='row'
             >
                 <Input
                     type="email"
                     placeholder="Enter your email"
-                    {...register("email", {
-                        required: true,
-                        validate: {
-                            matchPatern:(value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                            "Invalid email address"
-                        }
-                    })}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                 />
                 <Input
                     type="text"
                     placeholder="Enter your password"
-                    {...register("password", {
-                        required: true,
-                    })}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
                 <Button type="submit">Update email</Button>
+            </form>
+
+            <form 
+                onSubmit={updatePassword}
+                className='row'
+            >
+                <Input
+                    type="text"
+                    placeholder="New password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                />
+                <Input
+                    type="text"
+                    placeholder="Old password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <Button type="submit">Update Password</Button>
             </form>
         </div>
     );

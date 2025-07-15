@@ -2,16 +2,15 @@ import { useSelector, useDispatch } from "react-redux";
 import appwriteService from "../appwrite/config";
 import authService from "../appwrite/authentication";
 import { logout } from "../store/authSlice";
-import { Button, ProfileImage, Message, Table } from "./Index";
+import { Button, ProfileImage, Message, Table, Loader } from "./Index";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 
 function Settings(){
     const userData = useSelector(state => state.auth.userData);
-    const dateOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
-    const createdTime = new Date(userData?.$createdAt).toLocaleDateString("en-GB", dateOptions);
     const imageSrc = appwriteService.getFileView(`profile-image-${userData?.$id}`);
 
+    const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
     const [sessions, setSessions] = useState(null);
@@ -30,10 +29,15 @@ function Settings(){
     }
 
     const getSessions = async () => {
+        setLoading(true)
         const result = await authService.getSessions();
-        if(result) setSessions(result.sessions);
+        if(result){
+            setSessions(result.sessions);
+            setLoading(false)
+        } 
     }
     const deleteSession = async (e) => {
+        setLoading(true);
         setErrorMessage(null);
         setSuccessMessage(null);
         if(confirm("Do you want to log out of that device?")){
@@ -46,9 +50,11 @@ function Settings(){
                 setSuccessMessage(null);
                 setErrorMessage("Something went wrong, Please try again.");
             }
+        setLoading(false);
         }
     }
     const deletAllSessions = () => {
+        setLoading(true);
         setErrorMessage(null);
         setSuccessMessage(null);
         if(confirm("Do you want to log out of all devices?")){
@@ -65,29 +71,34 @@ function Settings(){
                 }
             });
             getSessions();
+            setLoading(false);
         }
     }
 
     const getLogs = async () =>{
+        setLoading(true);
         setErrorMessage(null);
         const result = await authService.getLogs();
         if(result){
             setLogs(result.logs);
         }else setErrorMessage("Something went wrong, Please try again.");
+        setLoading(false);
     }
 
     const logoutHandler = () => {
+        setLoading(true);
         authService.logout().then(res => {
             setErrorMessage(null);
             if(res){
                 dispatch(logout());
                 navigate("/");
             }else setErrorMessage("Something went wrong, Please try again.");
-        });
+        }).finally(() => setLoading(false));
     }
 
     return(
         <div className="settings column">
+            {loading && <Loader />}
             <Message success={successMessage} error={errorMessage} />
             <div className="page-title">Settings</div>
             <div className="row">
