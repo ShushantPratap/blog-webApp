@@ -116,7 +116,7 @@ function ProfileDetails({userId}){
                     }
                     value="saved"
                 >
-                    <i className='bx  bx-bookmark mr-1' /> 
+                    <i className='bx bx-bookmark mr-1' /> 
                     Saved
                 </Button>
                 </>}
@@ -145,7 +145,6 @@ function ProfileDetails({userId}){
                         return <div key={post.$id} className="grid-item">
                         <PostCard
                             {...post}
-                            userId={false}
                         />
                         </div>
                     }
